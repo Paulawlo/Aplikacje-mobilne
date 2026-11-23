@@ -1,0 +1,13 @@
+{
+  "name": "penguin-firestore-rules-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test firestore.test.js"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "firebase": "^13.4.0",
+    "firebase-tools": "^15.37.0"
+  }
+}
