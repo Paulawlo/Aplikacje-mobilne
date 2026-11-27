@@ -1,42 +1,42 @@
-﻿# Aplikacje mobilne — Pingwinek
+# Pingwinek – aplikacje mobilne
 
-Szkielet aplikacji Android w Kotlinie i Compose. Projekt jest na wczesnym etapie: nawyki i wpisy są zapisywane lokalnie w Room/SQLite, a aparat można uruchomić testowo. OCR, konta i synchronizacja nie są jeszcze zaimplementowane.
+Pingwinek to aplikacja na Androida, która ma pomagać w regularnym wykonywaniu nawyków. Docelowo grupa 2–4 osób wspólnie opiekuje się pingwinkiem, którego stan zależy od ich postępów.
+
+## Aktualny stan
+
+- Dodawanie i edycja nawyków (czytanie, sen, kroki).
+- Zapisywanie wyników i historii lokalnie w Room (SQLite).
+- Naliczanie punktów oraz archiwizacja nawyków.
+- Testowe uruchamianie aparatu.
+
+OCR, logowanie, synchronizacja i wspólny stan pingwinka nie są jeszcze gotowe.
 
 ## Uruchomienie
 
-1. Zainstaluj Android Studio oraz Android SDK Platform 35. W ustawieniach Gradle wybierz JDK 17 (np. JDK dołączone do zgodnej wersji Android Studio).
-2. Otwórz w Android Studio folder zawierający `settings.gradle.kts`. Pozwól Gradle pobrać zależności i zaakceptuj ewentualne licencje SDK.
-3. Utwórz emulator Android API 26 lub nowszy albo podłącz telefon z włączonym debugowaniem USB.
-4. Wybierz konfigurację `ap
-p` i uruchom aplikację. Po skonfigurowaniu wrappera można też zbudować ją poleceniem `./gradlew :app:assembleDebug` (Windows: `.\gradlew.bat :app:assembleDebug`).
+Kod aplikacji znajduje się w gałęzi [milestone5](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone5), nie w `main`.
 
-**Stan weryfikacji:** nową wersję z Room zbudowano i uruchomiono na emulatorze API 26, sprawdzając zapis po zamknięciu aplikacji. Z powodu blokady zwykłego katalogu `app/build` aktualny testowy APK znajduje się w `.local-tools/fresh-build/app/outputs/apk/debug/app-debug.apk`. Nie ma jeszcze konfiguracji projektu Firebase.
+1. Pobierz repozytorium i przełącz się na gałąź `milestone5` (`git checkout milestone5`).
+2. Otwórz folder projektu w Android Studio.
+3. Zainstaluj Android SDK Platform 35 i ustaw Gradle JDK na 17.
+4. Uruchom konfigurację `app` na emulatorze API 26 lub nowszym albo na telefonie.
 
-Opis modelu i decyzji znajduje się w [milestone 2](milestone/milestone2/Architektura%20i%20model%20danych.md). Ustalenia produktu są w [milestone 1](milestone/milestone1/Odpowiedzi%20milestone1.md).
+Można również zbudować APK poleceniem `./gradlew :app:assembleDebug` (Windows: `.\gradlew.bat :app:assembleDebug`).
 
-## Lokalne narzędzia na tym komputerze
+Wcześniejsza wersja została uruchomiona na emulatorze API 26; sprawdzono zapis wyniku po zamknięciu aplikacji. Kompilacja po uzupełnieniu plików w repozytorium wymaga ponownego sprawdzenia.
 
-W katalogu `.local-tools` znajdują się pobrane JDK 17, Android SDK i pamięć Gradle. Katalog oraz `local.properties` są pomijane przez Git. Aby zbudować projekt w PowerShell, można uruchomić:
+## Etapy projektu
 
-```powershell
-$env:JAVA_HOME = (Resolve-Path '.local-tools\jdk').Path
-$env:GRADLE_USER_HOME = (Resolve-Path '.local-tools').Path + '\gradle-home'
-.\gradlew.bat :app:assembleDebug
-```
+| Gałąź | Zawartość |
+| --- | --- |
+| [work-plan](https://github.com/Paulawlo/Aplikacje-mobilne/tree/work-plan) | Plan pracy i założenia |
+| [milestone0](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone0) | Pomysł |
+| [milestone1](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone1) | Wymagania |
+| [milestone2](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone2) | Architektura i model danych |
+| [milestone3](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone3) | Prototyp i UX |
+| [milestone4](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone4) | Reguły nawyków i testy |
+| [milestone5](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone5) | Aktualny kod Android |
+| [milestone6](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone6) – [milestone8](https://github.com/Paulawlo/Aplikacje-mobilne/tree/milestone8) | Dokumenty kolejnych etapów |
 
+Prototyp HTML jest dostępny w gałęzi milestone5. Nie jest zrzutem ekranu działającej aplikacji.
 
-
-
-## Lokalne testy reguł Firestore
-
-W katalogu `tests/firestore` znajdują się testy wstępnych reguł; reguły obecnie blokują wszystkie zapisy klientów. Nie są wdrożone w chmurze. Testy wymagają Node.js, npm, Javy zgodnej z bieżącym emulatorem oraz internetu przy pierwszym pobraniu zależności:
-
-```powershell
-npm.cmd install --prefix tests/firestore
-.\tests\firestore\node_modules\.bin\firebase.cmd emulators:exec --project demo-penguin --only firestore "npm.cmd --prefix tests/firestore test"
-```
-
-Identyfikator `demo-penguin` jest przeznaczony dla emulatora; do konfiguracji rzeczywistego Firebase potrzebne są osobny projekt i konto. Nie dodawaj do repozytorium kluczy serwisowych ani tokenów. Przed produkcyjnym użyciem trzeba zaimplementować i przetestować autoryzowany backend oraz sposób bezpiecznego zapisu.
-
-
-
+Projekt nie wymaga obecnie konfiguracji Firebase do uruchomienia lokalnych funkcji. Wstępne reguły Firestore i ich testy znajdują się w milestone2.
