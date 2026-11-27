@@ -1,6 +1,6 @@
 ﻿# Milestone 2 — architektura i model danych
 
-Status: projekt techniczny i wstępny szkielet; integracja Room, Firebase, OCR i synchronizacji nie jest jeszcze zaimplementowana. Dokument uwzględnia ustalenia z milestone 1, w tym grupy 2–4 osób i jednego pingwinka. Wcześniejsze wzmianki o parze w planie M2 zastępujemy grupą.
+Dokument opisuje planowaną architekturę Pingwinka. Grupa liczy 2–4 osoby i opiekuje się jednym pingwinkiem. Stan implementacji znajduje się w README na gałęzi main.
 
 ## 1. Architektura
 
@@ -23,7 +23,7 @@ flowchart LR
 - **ViewModel:** udostępnia stan ekranu i obsługuje działania użytkownika, przetrwa odtworzenie ekranu. Reguły powinny być czystymi funkcjami Kotlin możliwymi do testowania.
 - **Repozytoria:** dostarczają dane z lokalnej bazy i przyjmują polecenia. Jednoznacznie rozdzielają dane prywatne właściciela od danych udostępnianych grupie.
 - **Room/SQLite:** lokalne źródło danych dla UI i trwała kolejka operacji. Po poprawnym potwierdzeniu wyniki trafiają do lokalnej kopii.
-- **Backend:** wspólny autorytatywny stan grupy i rozliczeń; użytkownicy nie nadają sobie członkostwa ani punktów zdrowia pingwinka przez dowolny zapis. Zaufana operacja sprawdza zaproszenia, granice grupy, terminy i rozliczenia.
+- **Backend:** wspólny stan grupy i rozliczeń; użytkownicy nie nadają sobie członkostwa ani punktów zdrowia pingwinka przez dowolny zapis. Zaufana operacja sprawdza zaproszenia, granice grupy, terminy i rozliczenia.
 - **Aparat i OCR:** zdjęcie jest analizowane lokalnie. OCR odczytuje tekst, nie dowodzi wykonania nawyku; w pierwszej wersji obsługa wybranych formatów.
 
 ## 2. Model domenowy
@@ -59,14 +59,14 @@ Przykładowe ścieżki — schemat, nie gotowe reguły:
 users/{userId}/habits/{habitId}           # prywatne ustawienia właściciela
 users/{userId}/entries/{entryId}          # prywatne wyniki i OCR
 users/{userId}/operations/{operationId}   # żądania i potwierdzenia operacji
- groups/{groupId}                         # podstawowe dane grupy
- groups/{groupId}/members/{userId}        # członkostwo
- groups/{groupId}/publicProgress/{id}      # nazwa nawyku i status, bez wartości
- groups/{groupId}/penguins/{penguinId}     # wspólny stan i historia
- groups/{groupId}/settlements/{id}         # status i wynik rozliczenia
+groups/{groupId}                         # podstawowe dane grupy
+groups/{groupId}/members/{userId}        # członkostwo
+groups/{groupId}/publicProgress/{id}      # nazwa nawyku i status, bez wartości
+groups/{groupId}/penguins/{penguinId}     # wspólny stan i historia
+groups/{groupId}/settlements/{id}         # status i wynik rozliczenia
 ```
 
-Ścieżki `groups` należy zapisać bez początkowej spacji (użyto jej wyłącznie dla czytelności bloku). Reguły Firestore powinny ograniczać odczyt `users/{uid}` do właściciela, a grupy do aktualnych członków; pola wyników prywatnych nie mogą trafiać do dokumentów grupowych. Uprawnienia do modyfikacji członkostwa, salda streaka, rozliczenia i zdrowia pingwina wyłącznie przez zaufany backend. Testować osobno odczyt, zapis, nową osobę, obce konto, wygasłe zaproszenie i pełną grupę. Same reguły nie zapewniają bezpieczeństwa błędnie zaprojektowanej funkcji backendowej.
+Reguły Firestore powinny ograniczać odczyt `users/{uid}` do właściciela, a grupy do aktualnych członków; pola wyników prywatnych nie mogą trafiać do dokumentów grupowych. Uprawnienia do modyfikacji członkostwa, salda streaka, rozliczenia i zdrowia pingwina wyłącznie przez zaufany backend. Testować osobno odczyt, zapis, nową osobę, obce konto, wygasłe zaproszenie i pełną grupę. Same reguły nie zapewniają bezpieczeństwa błędnie zaprojektowanej funkcji backendowej.
 
 ## 5. Offline, termin i synchronizacja
 
